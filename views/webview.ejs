@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+	<style>
+        .star{
+          color: goldenrod;
+          font-size: 2.0rem;
+          padding: 0 1rem; /* space out the stars */
+        }
+        .star::before{
+          content: '\2606';    /* star outline */
+          cursor: pointer;
+        }
+        .star.rated::before{
+          /* the style for a selected star */
+          content: '\2605';  /* filled star */
+        }
+        
+        .stars{
+            counter-reset: rateme 0;   
+            font-size: 2.0rem;
+            font-weight: 900;
+        }
+        .star.rated{
+            counter-increment: rateme 1;
+        }
+        .stars::after{
+            content: counter(rateme) '/5';
+        }
+    </style>
+	<style>
+
+		h3 {
+		 font-family: Georgia, "Times New Roman", Times, serif;
+		 font-size: 12px;
+		 color: #039;
+		 background-color: #FCEBB6;
+		
+		}
+		.stylename {
+		 font-family: Georgia, “Times New Roman”, Times, serif;
+		 font-size: 15px;
+		 font-style: normal;
+		 font-weight: bold;
+		 font-variant: small-caps;
+		 color: #006;
+		}
+		
+		</style>
+    <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var config = {
+          apiKey: "AIzaSyBdG1InVWd_nf9L0A77rL23L_hRRnYKNPI",
+        authDomain: "androhub-2b873.firebaseapp.com",
+        databaseURL: "https://androhub-2b873.firebaseio.com",
+        projectId: "androhub-2b873",
+        storageBucket: "androhub-2b873.appspot.com",
+        messagingSenderId: "515237248825",
+        appId: "1:515237248825:web:8a891adee8182b4802f2e8",
+        measurementId: "G-1T5M7KETK3"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(config);
+      </script>
+
+</head>
+<body>
+<h3>
+    Inherited constants
+From class android.view.ViewGroup
+From class android.view.View
+Inherited fields
+From class android.view.View
+Public constructors
+WebView(Context context)
+Constructs a new WebView with an Activity Context object.
+
+</h3>
+<p class="stylename">
+    Inherited constants
+From class android.view.ViewGroup
+From class android.view.View
+Inherited fields
+From class android.view.View
+Public constructors
+WebView(Context context)
+Constructs a new WebView with an Activity Context object.
+
+WebView(Context context, AttributeSet attrs)
+Constructs a new WebView with layout parameters.
+
+WebView(Context context, AttributeSet attrs, int defStyleAttr)
+Constructs a new WebView with layout parameters and a default style.
+
+WebView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes)
+Constructs a new WebView with layout parameters and a default style.
+
+WebView(Context context, AttributeSet attrs, int defStyleAttr, boolean privateBrowsing)
+This constructor is deprecated. Private browsing is no longer supported directly via WebView and will be removed in a future release. Prefer using WebSettings, WebViewDatabase, CookieManager and WebStorage for fine-grained control of privacy data.
+
+Public methods
+void	addJavascriptInterface(Object object, String name)
+Injects the supplied Java object into this WebView.
+
+void	autofill(SparseArray<AutofillValue> values)
+Automatically fills the content of the virtual children within this view.
+
+boolean	canGoBack()
+Gets whether this WebView has a back history item.
+
+boolean	canGoBackOrForward(int steps)
+
+
+PrintDocumentAdapter	createPrintDocumentAdapter(String documentName)
+Creates a PrintDocumentAdapter that provides the content of this WebView for printing.
+
+PrintDocumentAdapter	createPrintDocumentAdapter()
+This method was deprecated in API level 21. Use createPrintDocumentAdapter(java.lang.String) which requires user to provide a print document name.
+
+WebMessagePort[]	createWebMessageChannel()
+Creates a message channel to communicate with JS and returns the message ports that represent the endpoints of this message channel.
+
+ You can find all registered users in the Firebase console.
+</p>
+<a>
+	<img src="images/print.png" alt="print screen"
+	onclick="window.print(); "target="_blank"
+	style="cursor: pointer;" > </a>
+
+<table>
+  
+	<tr>
+	 <td>Comment: </td>
+	 <td><input type="text" name="user_name" id="user_name" /></td>
+	</tr>
+	<tr>
+	 <td colspan="2">
+	  <input type="button" value="Submit" onclick="save_user();" />
+	  
+	 </td>
+	</tr>
+   </table>
+   
+   <h3>COMMENTS</h3>
+   
+   <table id="tbl_users_list" border="1">
+	<tr>
+	 <td>ID</td>
+	 <td> Comments</td>
+	</tr>
+   </table>
+  
+   <script>
+	var database = firebase.database();
+	var tblUsers = document.getElementById('tbl_users_list');
+	var databaseRef = firebase.database().ref('comments/');
+	var rowIndex = 1;
+	
+	databaseRef.once('value', function(snapshot) {
+	  snapshot.forEach(function(childSnapshot) {
+	 var childKey = childSnapshot.key;
+	 var childData = childSnapshot.val();
+	 
+	 var row = tblUsers.insertRow(rowIndex);
+	 var cellId = row.insertCell(0);
+	 var cellName = row.insertCell(1);
+	 cellId.appendChild(document.createTextNode(childKey));
+	 cellName.appendChild(document.createTextNode(childData.user_name));
+	 
+	 rowIndex = rowIndex + 1;
+	  });
+	});
+	 
+	function save_user(){
+	 var user_name = document.getElementById('user_name').value;
+	
+	 var uid = firebase.database().ref().child('comments').push().key;
+	 
+	 var data = {
+	  user_id: uid,
+	  user_name: user_name
+	 }
+	 
+	 var updates = {};
+	 updates['/comments/' + uid] = data;
+	 firebase.database().ref().update(updates);
+	 
+	 alert('The user is created successfully!');
+	 reload_page();
+	}
+
+   
+	
+	function reload_page(){
+	 window.location.reload();
+	}
+	
+   </script>
+    <h1>Star Rating System</h1>
+    <div class="stars" data-rating="3">
+        <span class="star">&nbsp;</span>
+        <span class="star">&nbsp;</span>
+        <span class="star">&nbsp;</span>
+        <span class="star">&nbsp;</span>
+        <span class="star">&nbsp;</span>
+    </div>
+    <p>The number shown after the CSS is generated with a CSS counter.</p>
+    
+    
+    <script>
+        
+        //initial setup
+        document.addEventListener('DOMContentLoaded', function(){
+            let stars = document.querySelectorAll('.star');
+            stars.forEach(function(star){
+                star.addEventListener('click', setRating); 
+            });
+            
+            let rating = parseInt(document.querySelector('.stars').getAttribute('data-rating'));
+            let target = stars[rating - 1];
+            target.dispatchEvent(new MouseEvent('click'));
+        });
+
+        function setRating(ev){
+            let span = ev.currentTarget;
+            let stars = document.querySelectorAll('.star');
+            let match = false;
+            let num = 0;
+            stars.forEach(function(star, index){
+                if(match){
+                    star.classList.remove('rated');
+                }else{
+                    star.classList.add('rated');
+                }
+                //are we currently looking at the span that was clicked
+                if(star === span){
+                    match = true;
+                    num = index + 1;
+                }
+            });
+            document.querySelector('.stars').setAttribute('data-rating', num);
+        }
+        
+    </script>
+</body>
+</html>

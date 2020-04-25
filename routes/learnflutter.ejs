@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Flutter</title>
+	<style>
+        .star{
+          color: goldenrod;
+          font-size: 2.0rem;
+          padding: 0 1rem; /* space out the stars */
+        }
+        .star::before{
+          content: '\2606';    /* star outline */
+          cursor: pointer;
+        }
+        .star.rated::before{
+          /* the style for a selected star */
+          content: '\2605';  /* filled star */
+        }
+        
+        .stars{
+            counter-reset: rateme 0;   
+            font-size: 2.0rem;
+            font-weight: 900;
+        }
+        .star.rated{
+            counter-increment: rateme 1;
+        }
+        .stars::after{
+            content: counter(rateme) '/5';
+        }
+    </style>
+	<style>
+
+		h3 {
+		 font-family: Georgia, "Times New Roman", Times, serif;
+		 font-size: 12px;
+		 color: #039;
+		 background-color: #FCEBB6;
+		
+		}
+		.stylename {
+		 font-family: Georgia, “Times New Roman”, Times, serif;
+		 font-size: 15px;
+		 font-style: normal;
+		 font-weight: bold;
+		 font-variant: small-caps;
+		 color: #006;
+		}
+		
+		</style>
+
+	<script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var config = {
+          apiKey: "AIzaSyBdG1InVWd_nf9L0A77rL23L_hRRnYKNPI",
+        authDomain: "androhub-2b873.firebaseapp.com",
+        databaseURL: "https://androhub-2b873.firebaseio.com",
+        projectId: "androhub-2b873",
+        storageBucket: "androhub-2b873.appspot.com",
+        messagingSenderId: "515237248825",
+        appId: "1:515237248825:web:8a891adee8182b4802f2e8",
+        measurementId: "G-1T5M7KETK3"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(config);
+      </script>
+
+</head>
+<body>
+<h1>Flutter Introduction</h1>
+
+<p class="stylename">
+	Quickly ship features with a focus on native end-user experiences. Layered architecture allows for full customization, 
+	which results in incredibly fast rendering and expressive and flexible designs.
+	Flutter’s widgets incorporate all critical platform differences such as scrolling, navigation, 
+	icons and fonts, and your Flutter code is compiled to native ARM machine code using Dart's native compilers. 
+	Thus Flutter gives you full native performance on both iOS and Android.
+</p>
+
+	<a>
+		<img src="images/print.png" alt="print screen"
+		onclick="window.print(); "target="_blank"
+		style="cursor: pointer;" > </a>
+
+
+
+<table>
+  
+	<tr>
+	 <td>Comment: </td>
+	 <td><input type="text" name="user_name" id="user_name" /></td>
+	</tr>
+	<tr>
+	 <td colspan="2">
+	  <input type="button" value="Submit" onclick="save_user();" />
+	  
+	 </td>
+	</tr>
+   </table>
+   
+   <h2>COMMENTS</h2>
+   
+   <table id="tbl_users_list" border="1">
+	<tr>
+	 <td>ID</td>
+	 <td> Comments </td>
+	</tr>
+   </table>
+  
+   <script>
+	var database = firebase.database();
+	var tblUsers = document.getElementById('tbl_users_list');
+	var databaseRef = firebase.database().ref('comments/');
+	var rowIndex = 1;
+	
+	databaseRef.once('value', function(snapshot) {
+	  snapshot.forEach(function(childSnapshot) {
+	 var childKey = childSnapshot.key;
+	 var childData = childSnapshot.val();
+	 
+	 var row = tblUsers.insertRow(rowIndex);
+	 var cellId = row.insertCell(0);
+	 var cellName = row.insertCell(1);
+	 cellId.appendChild(document.createTextNode(childKey));
+	 cellName.appendChild(document.createTextNode(childData.user_name));
+	 
+	 rowIndex = rowIndex + 1;
+	  });
+	});
+	 
+	function save_user(){
+	 var user_name = document.getElementById('user_name').value;
+	
+	 var uid = firebase.database().ref().child('comments').push().key;
+	 
+	 var data = {
+	  user_id: uid,
+	  user_name: user_name
+	 }
+	 
+	 var updates = {};
+	 updates['/comments/' + uid] = data;
+	 firebase.database().ref().update(updates);
+	 
+	 alert('The user is created successfully!');
+	 reload_page();
+	}
+
+   
+	
+	function reload_page(){
+	 window.location.reload();
+	}
+	
+   </script>
+    <h1>Star Rating System</h1>
+    <div class="stars" data-rating="3">
+        <span class="star">&nbsp;</span>
+        <span class="star">&nbsp;</span>
+        <span class="star">&nbsp;</span>
+        <span class="star">&nbsp;</span>
+        <span class="star">&nbsp;</span>
+    </div>
+    
+    
+    <script>
+        
+        //initial setup
+        document.addEventListener('DOMContentLoaded', function(){
+            let stars = document.querySelectorAll('.star');
+            stars.forEach(function(star){
+                star.addEventListener('click', setRating); 
+            });
+            
+            let rating = parseInt(document.querySelector('.stars').getAttribute('data-rating'));
+            let target = stars[rating - 1];
+            target.dispatchEvent(new MouseEvent('click'));
+        });
+
+        function setRating(ev){
+            let span = ev.currentTarget;
+            let stars = document.querySelectorAll('.star');
+            let match = false;
+            let num = 0;
+            stars.forEach(function(star, index){
+                if(match){
+                    star.classList.remove('rated');
+                }else{
+                    star.classList.add('rated');
+                }
+                //are we currently looking at the span that was clicked
+                if(star === span){
+                    match = true;
+                    num = index + 1;
+                }
+            });
+            document.querySelector('.stars').setAttribute('data-rating', num);
+        }
+        
+    </script>
+
+
+</body>
+</html>

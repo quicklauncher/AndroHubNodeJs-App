@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Android Learning</title>
+	<style>
+
+		h3 {
+		 font-family: Georgia, "Times New Roman", Times, serif;
+		 font-size: 12px;
+		 color: #039;
+		 background-color: #FCEBB6;
+		
+		}
+		.stylename {
+		 font-family: Georgia, “Times New Roman”, Times, serif;
+		 font-size: 15px;
+		 font-style: normal;
+		 font-weight: bold;
+		 font-variant: small-caps;
+		 color: #006;
+		}
+		
+		</style>
+    <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var config = {
+          apiKey: "AIzaSyBdG1InVWd_nf9L0A77rL23L_hRRnYKNPI",
+        authDomain: "androhub-2b873.firebaseapp.com",
+        databaseURL: "https://androhub-2b873.firebaseio.com",
+        projectId: "androhub-2b873",
+        storageBucket: "androhub-2b873.appspot.com",
+        messagingSenderId: "515237248825",
+        appId: "1:515237248825:web:8a891adee8182b4802f2e8",
+        measurementId: "G-1T5M7KETK3"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(config);
+      </script>
+</head>
+<body>
+<h3>
+    Firebase email and password authentication can be used to enable users of your android app register/login on your app using the old fashion email and password style without you worrying much about building a backend to support the user authentication process.
+</h3>
+<p class="stylename">
+    Get started with Android 11 Developer Preview
+    Review the program and timeline - read the Overview for key dates and details.
+    Set up a runtime environment - see Get Android 11 to flash a Google Pixel device or set up an emulator.
+    Set up Android Studio - try the preview SDK and tools - see Setup Guide for steps.
+    Learn about what's new - review the privacy features and behavior changes that may affect your app.
+    Test your app - run through all flows to look for issues. Toggle behavior changes at runtime to isolate issues.
+    Update your app - targeting Android 11 if possible, test with users via beta channels or other groups.
+And there you have it. A working email/password user registration and login activity for your android app. If you are wondering where your data is stored, the answer if on Firebase. You can find all registered users in the Firebase console.
+</p>
+<a>
+	<img src="images/print.png" alt="print screen"
+	onclick="window.print(); "target="_blank"
+	style="cursor: pointer;" > </a>
+
+<table>
+  
+	<tr>
+	 <td>Comment: </td>
+	 <td><input type="text" name="user_name" id="user_name" /></td>
+	</tr>
+	<tr>
+	 <td colspan="2">
+	  <input type="button" value="Submit" onclick="save_user();" />
+	  
+	 </td>
+	</tr>
+   </table>
+   
+   <h3>COMMENTS</h3>
+   
+   <table id="tbl_users_list" border="1">
+	<tr>
+	 <td>ID</td>
+	 <td> Comments</td>
+	</tr>
+   </table>
+  
+   <script>
+	var database = firebase.database();
+	var tblUsers = document.getElementById('tbl_users_list');
+	var databaseRef = firebase.database().ref('comments/');
+	var rowIndex = 1;
+	
+	databaseRef.once('value', function(snapshot) {
+	  snapshot.forEach(function(childSnapshot) {
+	 var childKey = childSnapshot.key;
+	 var childData = childSnapshot.val();
+	 
+	 var row = tblUsers.insertRow(rowIndex);
+	 var cellId = row.insertCell(0);
+	 var cellName = row.insertCell(1);
+	 cellId.appendChild(document.createTextNode(childKey));
+	 cellName.appendChild(document.createTextNode(childData.user_name));
+	 
+	 rowIndex = rowIndex + 1;
+	  });
+	});
+	 
+	function save_user(){
+	 var user_name = document.getElementById('user_name').value;
+	
+	 var uid = firebase.database().ref().child('comments').push().key;
+	 
+	 var data = {
+	  user_id: uid,
+	  user_name: user_name
+	 }
+	 
+	 var updates = {};
+	 updates['/comments/' + uid] = data;
+	 firebase.database().ref().update(updates);
+	 
+	 alert('The user is created successfully!');
+	 reload_page();
+	}
+
+   
+	
+	function reload_page(){
+	 window.location.reload();
+	}
+	
+   </script>
+
+</body>
+</html>
