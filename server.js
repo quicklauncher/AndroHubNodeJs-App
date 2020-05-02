@@ -6,6 +6,7 @@ var learnflutter=require('./routes/learnflutter');
 var loogin=require('./routes/loogin');
 var firstapp=require('./routes/firstapp');
 var webview=require('./routes/webview');
+
 var pushnotify=require('./routes/pushnotify');
 var androidlearn=require('./routes/androidlearn');
 var QueAns=require('./routes/QueAns');
@@ -33,6 +34,7 @@ mongoose
 app.use(expressLayouts);
 app.set("view engine", "ejs");
 app.use('/learnflutter',learnflutter);
+
 app.use('/pushnotify',pushnotify);
 app.use('/loogin',loogin);
 app.use('/firstapp',firstapp);
@@ -72,7 +74,7 @@ app.use(express.static("Public"));
 app.use("/", require("./routes/index.js"));
 app.use("/users", require("./routes/users.js"));
 
-var port = process.env.PORT || 9092;
+var port = process.env.PORT || 9095;
 var server = http.createServer(app);
 server.listen(port, () => {
   console.log("Server is starting = " + port);
