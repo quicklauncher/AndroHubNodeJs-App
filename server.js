@@ -6,7 +6,7 @@ var learnflutter=require('./routes/learnflutter');
 var loogin=require('./routes/loogin');
 var firstapp=require('./routes/firstapp');
 var webview=require('./routes/webview');
-
+var ali=require('./routes/ali');
 var pushnotify=require('./routes/pushnotify');
 var androidlearn=require('./routes/androidlearn');
 var QueAns=require('./routes/QueAns');
@@ -41,6 +41,7 @@ app.use('/firstapp',firstapp);
 app.use('/webview',webview);
 app.use('/androidlearn',androidlearn);
 app.use('/QueAns',QueAns);
+app.use('/ali',ali);
 // Express body parser
 app.use(express.urlencoded({ extended: true }));
 
@@ -74,7 +75,7 @@ app.use(express.static("Public"));
 app.use("/", require("./routes/index.js"));
 app.use("/users", require("./routes/users.js"));
 
-var port = process.env.PORT || 9095;
+var port = process.env.PORT || 9096;
 var server = http.createServer(app);
 server.listen(port, () => {
   console.log("Server is starting = " + port);
