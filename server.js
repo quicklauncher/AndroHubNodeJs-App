@@ -3,7 +3,13 @@
 var http = require("http");
 var path = require("path");
 var learnflutter=require('./routes/learnflutter');
+var service=require('./routes/service');
+var about=require('./routes/about');
+var welcome=require('./routes/welcome');
+
+var index=require('./routes/index');
 var loogin=require('./routes/loogin');
+var inde=require('./routes/inde');
 var firstapp=require('./routes/firstapp');
 var webview=require('./routes/webview');
 var ali=require('./routes/ali');
@@ -34,7 +40,11 @@ mongoose
 app.use(expressLayouts);
 app.set("view engine", "ejs");
 app.use('/learnflutter',learnflutter);
-
+app.use('/inde',inde);
+app.use('/welcome',welcome);
+app.use('/index',index);
+app.use('/about',about);
+app.use('/service',service);
 app.use('/pushnotify',pushnotify);
 app.use('/loogin',loogin);
 app.use('/firstapp',firstapp);
@@ -75,7 +85,7 @@ app.use(express.static("Public"));
 app.use("/", require("./routes/index.js"));
 app.use("/users", require("./routes/users.js"));
 
-var port = process.env.PORT || 9096;
+var port = process.env.PORT || 3003;
 var server = http.createServer(app);
 server.listen(port, () => {
   console.log("Server is starting = " + port);
